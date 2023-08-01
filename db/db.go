@@ -8,6 +8,8 @@ import (
 	"github.com/joho/godotenv"
 )
 
+var DB *sql.DB
+
 func Init() (*sql.DB, error) {
 	err := godotenv.Load()
 	if err != nil {
@@ -26,11 +28,13 @@ func Init() (*sql.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+	
 
 	err = db.Ping()
 	if err != nil {
 		return nil, err
 	}
+	DB = db
 
 	fmt.Println("DB에 연결되었습니다.🔗")
 	return db, nil
