@@ -41,12 +41,32 @@ func SelectPostsInfo() ([]model.Post, error) {
 		}
 
 		posts = append(posts, post)
-
-		if err = rows.Err(); err != nil {
-			return nil, err
-		}
 	}
 
 	return posts, nil
 
+}
+
+func SelectPostInfo(postId int) (model.Post, error) {
+	q := `
+		SELECT *
+		FROM posts
+		WHERE post_id = ?
+	`
+	row := DB.QueryRow(q, postId)
+	
+	post := model.Post{}
+	var content sql.NullString
+
+	err := row.Scan(
+		&post.PostId,
+		&post.UserId,
+		&post.Title,
+		&content,
+	)
+	if err != nil {
+		return model.Post{}, err
+	}
+
+	return post, nil
 }
