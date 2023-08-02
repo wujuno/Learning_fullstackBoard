@@ -3,7 +3,7 @@ package route
 import (
 	"encoding/json"
 	"fmt"
-	"fullstackBoard/db"
+	"fullstackboard/db"
 	"net/http"
 	"strconv"
 

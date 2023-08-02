@@ -2,8 +2,8 @@ package route
 
 import (
 	"fmt"
-	"fullstackBoard/db"
-	"fullstackBoard/model"
+	"fullstackboard/db"
+	"fullstackboard/model"
 	"net/http"
 )
 

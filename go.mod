@@ -1,4 +1,4 @@
-module fullstackBoard
+module fullstackboard
 
 go 1.20
 

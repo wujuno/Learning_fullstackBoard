@@ -1,9 +1,9 @@
 package db
 
-import "fullstackBoard/model"
+import "fullstackboard/model"
 
 func InsertUser(user *model.User) error {
-	q :=`
+	q := `
 		INSERT INTO users(user_id, username, user_email, password)
 		VALUES (Null, ?, ?, ?)
 	`

@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"fullstackBoard/db"
-	"fullstackBoard/route/httpserver"
+
+	"fullstackboard/db"
+	"fullstackboard/route"
 	"os"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -21,5 +22,5 @@ func main() {
 
 	//서버 시작
 	fmt.Println("8080 포트에서 서버를 시작합니다🚀")
-	httpserver.StartHTTPServer()
+	route.StartHTTPServer()
 }
