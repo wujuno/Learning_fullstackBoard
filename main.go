@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"fullstackBoard/db"
-	"fullstackBoard/pkg/httpserver"
+	"fullstackBoard/route/httpserver"
 	"os"
 
 	_ "github.com/go-sql-driver/mysql"

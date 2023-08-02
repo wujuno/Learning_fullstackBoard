@@ -1,4 +1,4 @@
-package httpserver
+package route
 
 import (
 	"net/http"
@@ -12,9 +12,9 @@ func StartHTTPServer() {
 
 	r.HandleFunc("/posts", getPostsHandler).Methods(http.MethodGet)
 	r.HandleFunc("/posts/{postId}", getPostHandler).Methods(http.MethodGet)
+	r.HandleFunc("/signup", signupHandler).Methods(http.MethodPost)
 	
-	/* r.HandleFunc("/signup", signupHandler).Methods(http.MethodPost)
-	r.HandleFunc("/login", loginHandler).Methods(http.MethodGet)
+/* 	r.HandleFunc("/login", loginHandler).Methods(http.MethodGet)
 	r.HandleFunc("/posts/create", createPostHandler).Methods(http.MethodPost)
 	r.HandleFunc("/posts/delete", deletePostHandler).Methods(http.MethodDelete)
 	r.HandleFunc("/comments/create", createCommentHandler).Methods(http.MethodPost) */
