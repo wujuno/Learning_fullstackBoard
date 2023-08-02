@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"fullstackboard/db"
+	"fullstackboard/model"
 	"net/http"
 	"strconv"
 
@@ -57,4 +58,60 @@ func getPostHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+}
+
+func createPostHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	err := r.ParseForm()
+	if err != nil {
+		http.Error(w, "Failed to parse form data", http.StatusInternalServerError)
+		return
+	}
+
+	title := r.Form.Get("title")
+	content := r.Form.Get("content")
+
+	newPost := model.Post{
+		Title: title,
+		Content: content,
+	}
+
+	err = db.InsertPost(&newPost)
+	if err != nil {
+		http.Error(w, "Failed to create new post", http.StatusInternalServerError)
+		fmt.Println(err)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	fmt.Fprint(w, "Post created successfully")
+}
+
+func deletePostHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodDelete {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	vars := mux.Vars(r)
+	postId, err := strconv.Atoi(vars["postId"])
+	if err != nil {
+		http.Error(w, "Invalid postId parameter", http.StatusBadRequest)
+		fmt.Println(err)
+		return 
+	}
+
+	err = db.DeletePost(postId)
+	if err != nil {
+		http.Error(w, "Failed to delete post", http.StatusInternalServerError )
+		fmt.Println(err)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	fmt.Fprint(w, "Post deleted successfully")
 }

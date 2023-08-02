@@ -70,3 +70,31 @@ func SelectPostInfo(postId int) (model.Post, error) {
 
 	return post, nil
 }
+
+func InsertPost(post *model.Post) error {
+	//TODO: user_id 파라미터 값 수정해야함. 
+	q := `
+		SELECT INTO posts(post_id, user_id, title, content)
+		VALUES (NULL, 1, ?, ?)
+	`
+	_, err := DB.Exec(q, post.Title, post.Content)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func DeletePost(id int) error {
+	q := `
+		DELETE FROM posts
+		WHERE post_id = ?
+	`
+
+	_, err := DB.Exec(q, id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
