@@ -2,6 +2,8 @@ package db
 
 import (
 	"database/sql"
+	"errors"
+	"fmt"
 	"fullstackboard/model"
 )
 
@@ -72,9 +74,17 @@ func SelectPostInfo(postId int) (model.Post, error) {
 }
 
 func InsertPost(post *model.Post) error {
+	//TODO: else문 지워도 됨.
+	if post.Title == "" || post.Content == "" {
+		return errors.New("Title and content cannot be empty")
+	} else{
+		fmt.Println("title:",post.Title)
+		fmt.Println("content:",post.Content)
+	}
+
 	//TODO: user_id 파라미터 값 수정해야함. 
 	q := `
-		SELECT INTO posts(post_id, user_id, title, content)
+		INSERT INTO posts(post_id, user_id, title, content)
 		VALUES (NULL, 1, ?, ?)
 	`
 	_, err := DB.Exec(q, post.Title, post.Content)

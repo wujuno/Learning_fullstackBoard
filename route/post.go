@@ -65,19 +65,12 @@ func createPostHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
-
-	err := r.ParseForm()
+	
+	var newPost model.Post
+	err := json.NewDecoder(r.Body).Decode(&newPost)
 	if err != nil {
-		http.Error(w, "Failed to parse form data", http.StatusInternalServerError)
+		http.Error(w, "Failed to decode JSON data", http.StatusBadRequest)
 		return
-	}
-
-	title := r.Form.Get("title")
-	content := r.Form.Get("content")
-
-	newPost := model.Post{
-		Title: title,
-		Content: content,
 	}
 
 	err = db.InsertPost(&newPost)
