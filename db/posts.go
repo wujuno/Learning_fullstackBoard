@@ -108,3 +108,17 @@ func DeletePost(id int) error {
 
 	return nil
 }
+
+func UpdatePost(post *model.Post, id int) error {
+	q := `
+		UPDATE posts
+		SET title = ?, content = ?
+		WHERE post_id = ?
+	`
+	_, err := DB.Exec(q, post.Title, post.Content, id)
+	if err != nil {
+		return err
+	}
+	
+	return nil
+}

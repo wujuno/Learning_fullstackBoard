@@ -108,3 +108,35 @@ func deletePostHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 	fmt.Fprint(w, "Post deleted successfully")
 }
+
+func updatePostHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var UpdatedPost model.Post
+	err := json.NewDecoder(r.Body).Decode(&UpdatedPost)
+	if err != nil {
+		http.Error(w, "Failed to decode JSON data", http.StatusBadRequest)
+		return
+	}
+
+	vars := mux.Vars(r)
+	postId, err := strconv.Atoi(vars["postId"])
+	if err != nil {
+		http.Error(w, "Invalid postId parameter", http.StatusBadRequest)
+		fmt.Println(err)
+		return
+	}
+
+	err = db.UpdatePost(&UpdatedPost, postId)
+	if err != nil {
+		http.Error(w, "Failed to update post", http.StatusInternalServerError)
+		fmt.Println(err)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	fmt.Fprint(w, "Post updated successfully")
+}
