@@ -13,6 +13,7 @@ func SelectPostsInfo() ([]model.Post, error) {
 	q := `
 		SELECT *
 		FROM posts
+		ORDER BY post_id DESC;
 	`
 
 	rows, err := DB.Query(q)
