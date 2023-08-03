@@ -13,7 +13,7 @@ func StartHTTPServer() {
 	r.HandleFunc("/posts", getPostsHandler).Methods(http.MethodGet)
 	r.HandleFunc("/posts/{postId}", getPostHandler).Methods(http.MethodGet)
 	r.HandleFunc("/posts/create", createPostHandler).Methods(http.MethodPost)
-	r.HandleFunc("/posts/{postId}", deletePostHandler).Methods(http.MethodDelete)
+	r.HandleFunc("/posts/delete/{postId}", deletePostHandler).Methods(http.MethodDelete)
 	r.HandleFunc("/posts/update/{postId}", updatePostHandler).Methods(http.MethodPost)
 	
 	r.HandleFunc("/signup", signupHandler).Methods(http.MethodPost)

@@ -11,9 +11,10 @@ func SelectPostsInfo() ([]model.Post, error) {
 	posts := []model.Post{}
 
 	q := `
-		SELECT *
-		FROM posts
-		ORDER BY post_id DESC;
+		SELECT p.post_id, u.username, p.title, p.content
+		FROM posts AS p
+		LEFT JOIN users AS u ON p.user_id = u.user_id
+		ORDER BY p.post_id DESC;
 	`
 
 	rows, err := DB.Query(q)
@@ -28,7 +29,7 @@ func SelectPostsInfo() ([]model.Post, error) {
 		
 		err := rows.Scan(
 			&post.PostId,
-			&post.UserId,
+			&post.Username,
 			&post.Title,
 			&content,
 		)
@@ -52,8 +53,9 @@ func SelectPostsInfo() ([]model.Post, error) {
 
 func SelectPostInfo(postId int) (model.Post, error) {
 	q := `
-		SELECT *
-		FROM posts
+		SELECT p.post_id, u.username, p.title, p.content
+		FROM posts AS p
+		LEFT JOIN users AS u ON p.user_id = u.user_id
 		WHERE post_id = ?
 	`
 	row := DB.QueryRow(q, postId)
@@ -63,7 +65,7 @@ func SelectPostInfo(postId int) (model.Post, error) {
 
 	err := row.Scan(
 		&post.PostId,
-		&post.UserId,
+		&post.Username,
 		&post.Title,
 		&post.Content,
 	)
@@ -83,7 +85,7 @@ func InsertPost(post *model.Post) error {
 		fmt.Println("content:",post.Content)
 	}
 
-	//TODO: user_id 파라미터 값 수정해야함. 
+	//TODO: user_id 파라미터 값 수정해야함.
 	q := `
 		INSERT INTO posts(post_id, user_id, title, content)
 		VALUES (NULL, 1, ?, ?)
