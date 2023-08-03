@@ -89,15 +89,15 @@ func deletePostHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
-
+	
 	vars := mux.Vars(r)
 	postId, err := strconv.Atoi(vars["postId"])
 	if err != nil {
 		http.Error(w, "Invalid postId parameter", http.StatusBadRequest)
 		fmt.Println(err)
-		return 
+		return
 	}
-
+	
 	err = db.DeletePost(postId)
 	if err != nil {
 		http.Error(w, "Failed to delete post", http.StatusInternalServerError )

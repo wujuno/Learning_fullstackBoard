@@ -58,13 +58,13 @@ func SelectPostInfo(postId int) (model.Post, error) {
 	row := DB.QueryRow(q, postId)
 	
 	post := model.Post{}
-	var content sql.NullString
+	
 
 	err := row.Scan(
 		&post.PostId,
 		&post.UserId,
 		&post.Title,
-		&content,
+		&post.Content,
 	)
 	if err != nil {
 		return model.Post{}, err
