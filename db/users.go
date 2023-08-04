@@ -1,8 +1,19 @@
 package db
 
-import "fullstackboard/model"
+import (
+	"errors"
+	"fmt"
+	"fullstackboard/model"
+)
 
 func InsertUser(user *model.User) error {
+	if user.Name == "" || user.Password == "" {
+		return errors.New("Name and Password cannot be empty")
+	} else{
+		fmt.Println("Name:",user.Name)
+		fmt.Println("Password:",user.Password)
+	}
+
 	q := `
 		INSERT INTO users(user_id, username, user_email, password)
 		VALUES (Null, ?, ?, ?)

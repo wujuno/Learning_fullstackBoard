@@ -13,7 +13,7 @@ func SelectPostsInfo() ([]model.Post, error) {
 	q := `
 		SELECT p.post_id, u.username, p.title, p.content
 		FROM posts AS p
-		LEFT JOIN users AS u ON p.user_id = u.user_id
+		INNER JOIN users AS u ON p.user_id = u.user_id
 		ORDER BY p.post_id DESC;
 	`
 

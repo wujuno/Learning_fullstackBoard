@@ -1,6 +1,7 @@
 package route
 
 import (
+	"encoding/json"
 	"fmt"
 	"fullstackboard/db"
 	"fullstackboard/model"
@@ -13,21 +14,13 @@ func signupHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := r.ParseForm()
+	var newUser model.User
+	err := json.NewDecoder(r.Body).Decode(&newUser)
 	if err != nil {
-		http.Error(w, "Failed to parse form data", http.StatusInternalServerError)
+		http.Error(w, "Failed to decode JSON data", http.StatusBadRequest)
 		return
 	}
-
-	username := r.Form.Get("username")
-	email := r.Form.Get("email")
-	password := r.Form.Get("password")
-
-	newUser := model.User{
-		Name: username,
-		Email: email,
-		Password: password,
-	}
+	
 
 	err = db.InsertUser(&newUser)
 	if err != nil {
@@ -36,7 +29,8 @@ func signupHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.Redirect(w, r, "/", http.StatusCreated)
+	w.WriteHeader(http.StatusCreated)
+	fmt.Fprint(w, "User created successfully")
 
 
 }
