@@ -17,8 +17,9 @@ func StartHTTPServer() {
 	r.HandleFunc("/posts/{postId}", updatePostHandler).Methods(http.MethodPost)
 	
 	r.HandleFunc("/users", signupHandler).Methods(http.MethodPost)
-/* 	r.HandleFunc("/login", loginHandler).Methods(http.MethodGet)
-	r.HandleFunc("/comments/create", createCommentHandler).Methods(http.MethodPost) */
+	r.HandleFunc("/user", loginHandler).Methods(http.MethodPost)
+
+	
 	
 	c := cors.New(cors.Options{
 		AllowedOrigins: []string{"*"},
