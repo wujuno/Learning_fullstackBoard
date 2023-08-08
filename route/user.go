@@ -55,18 +55,18 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	hashedPassword, err := db.SelectExistUser(&user)
+	storedUser, err := db.SelectExistUser(&user)
 	if err != nil {
 		http.Error(w, "Internal server error",  http.StatusInternalServerError)
 		return
 	}
-	err = bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(user.Password))
+	err = bcrypt.CompareHashAndPassword([]byte(storedUser.Password), []byte(user.Password))
 	if err != nil {
 		http.Error(w, "잘못된 비밀번호입니다.", http.StatusUnauthorized)
 		return
 	}
 
-		w.WriteHeader(http.StatusOK)
-        w.Write([]byte("로그인 성공"))
+	w.WriteHeader(http.StatusOK)
+    w.Write([]byte("로그인 성공"))
 
 }
