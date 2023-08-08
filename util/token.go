@@ -9,7 +9,7 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
-func makeTokenString(user *model.User) (string, error) {
+func MakeTokenString(user *model.User) (string, error) {
 	accessToken := jwt.New(jwt.SigningMethodHS256)
 	claims := accessToken.Claims.(jwt.MapClaims)
 	

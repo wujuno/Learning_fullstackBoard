@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"fullstackboard/db"
 	"fullstackboard/model"
+	"fullstackboard/util"
 	"net/http"
 
 	"golang.org/x/crypto/bcrypt"
@@ -66,7 +67,12 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
-    w.Write([]byte("로그인 성공"))
+	accessToken, err := util.MakeTokenString(storedUser)
+	if err != nil {
+		http.Error(w, "Failed to create token", http.StatusInternalServerError)
+		return
+	}
 
+	w.WriteHeader(http.StatusOK)
+    w.Write([]byte(accessToken))
 }
