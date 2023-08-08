@@ -6,6 +6,8 @@ import (
 	"fullstackboard/db"
 	"fullstackboard/model"
 	"net/http"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 func signupHandler(w http.ResponseWriter, r *http.Request) {
@@ -21,6 +23,13 @@ func signupHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(newUser.Password), bcrypt.DefaultCost)
+	if err != nil {
+		http.Error(w, "Failed to hash password", http.StatusInternalServerError)
+		return
+	}
+
+	newUser.Password = string(hashedPassword)
 
 	err = db.InsertUser(&newUser)
 	if err != nil {
@@ -46,16 +55,18 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	isExist, err := db.SelectExistUser(&user)
+	hashedPassword, err := db.SelectExistUser(&user)
 	if err != nil {
 		http.Error(w, "Internal server error",  http.StatusInternalServerError)
 		return
 	}
-	if isExist {
+	err = bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(user.Password))
+	if err != nil {
+		http.Error(w, "잘못된 비밀번호입니다.", http.StatusUnauthorized)
+		return
+	}
+
 		w.WriteHeader(http.StatusOK)
         w.Write([]byte("로그인 성공"))
-	} else {
-		http.Error(w, "유저 정보가 일치하지 않습니다.", http.StatusUnauthorized)
-	}
-	
+
 }

@@ -26,17 +26,17 @@ func InsertUser(user *model.User) error {
 	return nil
 }
 
-func SelectExistUser(user *model.User) (bool, error) {
+func SelectExistUser(user *model.User) (string, error) {
 	q := `
-		SELECT COUNT(*) as userCount
+		SELECT password
 		FROM users
-		WHERE username = ? AND password = ?;
+		WHERE username = ?;
 	`
-	var count int8
-	err := DB.QueryRow(q, user.Name, user.Password).Scan(&count)
+	var hashedPassword string
+	err := DB.QueryRow(q, user.Name).Scan(&hashedPassword)
 	if err != nil {
-		return false, err
+		return "", err
 	}
 	
-	return count > 0, nil
+	return hashedPassword, nil
 }
