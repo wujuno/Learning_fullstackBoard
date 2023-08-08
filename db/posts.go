@@ -3,7 +3,6 @@ package db
 import (
 	"database/sql"
 	"errors"
-	"fmt"
 	"fullstackboard/model"
 )
 
@@ -53,7 +52,7 @@ func SelectPostsInfo() ([]model.Post, error) {
 
 func SelectPostInfo(postId int) (model.Post, error) {
 	q := `
-		SELECT p.post_id, u.username, p.title, p.content
+		SELECT p.post_id, u.user_id, u.username, p.title, p.content
 		FROM posts AS p
 		LEFT JOIN users AS u ON p.user_id = u.user_id
 		WHERE post_id = ?
@@ -65,6 +64,7 @@ func SelectPostInfo(postId int) (model.Post, error) {
 
 	err := row.Scan(
 		&post.PostId,
+		&post.UserId,
 		&post.Username,
 		&post.Title,
 		&post.Content,
@@ -77,20 +77,15 @@ func SelectPostInfo(postId int) (model.Post, error) {
 }
 
 func InsertPost(post *model.Post) error {
-	//TODO: else문 지워도 됨.
 	if post.Title == "" || post.Content == "" {
 		return errors.New("Title and content cannot be empty")
-	} else{
-		fmt.Println("title:",post.Title)
-		fmt.Println("content:",post.Content)
-	}
+	} 
 
-	//TODO: user_id 파라미터 값 수정해야함.
 	q := `
 		INSERT INTO posts(post_id, user_id, title, content)
-		VALUES (NULL, 1, ?, ?)
+		VALUES (NULL, ?, ?, ?)
 	`
-	_, err := DB.Exec(q, post.Title, post.Content)
+	_, err := DB.Exec(q,post.UserId, post.Title, post.Content)
 	if err != nil {
 		return err
 	}

@@ -16,7 +16,7 @@ func MakeTokenString(user *model.User) (string, error) {
 	claims["userId"] = user.Id
 	claims["username"] = user.Name
 	claims["iat"] = time.Now().Unix()
-	claims["exp"] = time.Now().Add(time.Minute * 1).Unix()
+	claims["exp"] = time.Now().Add(time.Minute * 30).Unix()
 
 	jwtKey := os.Getenv("JWT_SECRET_KEY")
 	t, err := accessToken.SignedString([]byte(jwtKey))
